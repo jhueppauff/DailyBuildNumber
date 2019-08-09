@@ -7,7 +7,8 @@ namespace DailyBuildNumber.Function
     {
         public BuildNumber()
         {
-            this.Year = Convert.ToInt16(DateTime.Now.Year.ToString("yy"));
+            string year = DateTime.Now.ToString("yy");
+            this.Year = Convert.ToInt16(year);
             this.DayOfYear = DateTime.Now.DayOfYear;
         }
 
