@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "DailyBuild"
+        },
+        "storageName": {
+            "value": "dailybuildsa"
+        },
+        "location": {
+            "value": "West Europe"
+        },
+        "subscriptionId": {
+            "value": "f9884eb8-386a-47f8-998d-0617bbf148e1"
+        }
+    }
+}
