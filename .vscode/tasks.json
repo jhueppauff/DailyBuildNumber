@@ -15,10 +15,7 @@
             "command": "dotnet build",
             "type": "shell",
             "dependsOn": "clean",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": "$msCompile",
             "options": {
                 "cwd": "${workspaceFolder}/Function"
@@ -52,6 +49,21 @@
             "command": "host start",
             "isBackground": true,
             "problemMatcher": "$func-watch"
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "path": "webclient/",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "path": "webclient/",
+            "problemMatcher": []
         }
     ]
 }
