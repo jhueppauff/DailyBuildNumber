@@ -9,9 +9,11 @@ const App: React.FC<{}> = () => {
     <div>
       {service.status === 'loading' && <div>Loading...</div>}
       {service.status === 'loaded' && (
-        <div>
+        <div className="App">
+        <header className="App-header">
           <p>The Build Number for today is :</p>
-          <p><b>{service.payload.Version}</b></p>      
+          <b>{service.payload.Version}</b>
+          </header>
         </div>
       )}
       {service.status === 'error' && (
