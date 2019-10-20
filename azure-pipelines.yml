@@ -39,6 +39,7 @@ stages:
       displayName: 'Publish Build Artifacts'
 
 - stage: Function
+  dependsOn: []
   jobs:
     - job: Build
       pool: 
