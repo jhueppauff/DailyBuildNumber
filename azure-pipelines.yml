@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+  demands: npm
+
+steps:
+  - task: Npm@1
+    displayName: 'npm install'
+    inputs:
+      verbose: false
+
+  - task: Npm@1
+    displayName: 'npm run build'
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: 'run build'
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files to Stageing Directory'
+    inputs: 
+     SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+     TargetFolder: '$(Build.ArtufactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Build Artifacts'
