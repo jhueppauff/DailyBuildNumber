@@ -14,11 +14,13 @@ steps:
   - task: Npm@1
     displayName: 'npm install'
     inputs:
+      workingDir: 'webclient'
       verbose: false
 
   - task: Npm@1
     displayName: 'npm run build'
     inputs:
+      workingDir: 'webclient'
       command: custom
       verbose: false
       customCommand: 'run build'
@@ -26,7 +28,7 @@ steps:
   - task: CopyFiles@2
     displayName: 'Copy Files to Stageing Directory'
     inputs: 
-     SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+     SourceFolder: '$(System.DefaultWorkingDirectory)/webclient/build'
      TargetFolder: '$(Build.ArtufactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
