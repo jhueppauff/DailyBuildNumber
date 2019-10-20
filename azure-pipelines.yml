@@ -84,12 +84,12 @@ stages:
             PathtoPublish: '$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip'
             ArtifactName: 'Function'
 
-- stage: ARM Template
+- stage: 'ARM Template'
   dependsOn: []
   jobs:
     - job: Build
       pool: 
-        vmImage: 'VS2017-Win2016'
+        vmImage: 'ubuntu-latest'
       steps:
         - task: PublishBuildArtifacts@1
           inputs:
