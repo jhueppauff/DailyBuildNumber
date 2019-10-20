@@ -84,7 +84,7 @@ stages:
             PathtoPublish: '$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip'
             ArtifactName: 'Function'
 
-- stage: 'ARM Template'
+- stage: 'ARMTemplate'
   dependsOn: []
   jobs:
     - job: Build
