@@ -6,30 +6,73 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-  demands: npm
+stages:
+- stage: Webclient
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+      demands: npm
+  
+    steps:
+    - task: Npm@1
+      displayName: 'npm install'
+      inputs:
+        workingDir: 'webclient'
+        verbose: false
+    
+    - task: Npm@1
+      displayName: 'npm run build'
+      inputs:
+       workingDir: 'webclient'
+       command: custom
+       verbose: false
+       customCommand: 'run build'
 
-steps:
-  - task: Npm@1
-    displayName: 'npm install'
-    inputs:
-      workingDir: 'webclient'
-      verbose: false
+    - task: CopyFiles@2
+      displayName: 'Copy Files to Stageing Directory'
+      inputs: 
+         SourceFolder: '$(System.DefaultWorkingDirectory)/webclient/build'
+         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  - task: Npm@1
-    displayName: 'npm run build'
-    inputs:
-      workingDir: 'webclient'
-      command: custom
-      verbose: false
-      customCommand: 'run build'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifacts'
 
-  - task: CopyFiles@2
-    displayName: 'Copy Files to Stageing Directory'
-    inputs: 
-     SourceFolder: '$(System.DefaultWorkingDirectory)/webclient/build'
-     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- stage: Function
+  jobs:
+    - job: Build
+      pool: 
+        vmImage: 'VS2017-Win2016'
+      
+      steps:
+        - task: DotNetCoreCLI@2
+          inputs: 
+            command: restore
+            projects: 'Function/*.csproj'
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Build Artifacts'
+        - task: DotNetCoreCLI@2
+          inputs: 
+            command: build
+            projects: 'Function/*.csproj'
+            arguments: '--configuration Release'
+
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: publish
+            arguments: '--configuration Release --output publish_output'
+            projects: 'Function/*.csproj'
+            publishWebProjects: false
+            modifyOutputPath: true
+            zipAfterPublish: false
+
+        - task: ArchiveFiles@2
+          displayName: "Archive files"
+          inputs:
+            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/Function/publish_output/s"
+            includeRootFolder: false
+            archiveFile: "$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip"
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip'
+            ArtifactName: 'drop'
