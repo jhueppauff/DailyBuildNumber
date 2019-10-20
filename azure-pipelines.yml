@@ -37,6 +37,9 @@ stages:
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Build Artifacts'
+      inputs:
+        ArtifactName: 'Function'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
 - stage: Function
   dependsOn: []
@@ -47,17 +50,20 @@ stages:
       
       steps:
         - task: DotNetCoreCLI@2
+          displayName: 'Dotnet Restore'
           inputs: 
             command: restore
             projects: 'Function/*.csproj'
 
         - task: DotNetCoreCLI@2
+          displayName: 'Dotnet Build'
           inputs: 
             command: build
             projects: 'Function/*.csproj'
             arguments: '--configuration Release'
 
         - task: DotNetCoreCLI@2
+          displayName: 'Dotnet Publish'
           inputs:
             command: publish
             arguments: '--configuration Release --output publish_output'
@@ -69,11 +75,23 @@ stages:
         - task: ArchiveFiles@2
           displayName: "Archive files"
           inputs:
-            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/Function/publish_output/s"
+            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/Function/publish_output/"
             includeRootFolder: false
             archiveFile: "$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip"
 
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip'
-            ArtifactName: 'drop'
+            ArtifactName: 'Function'
+
+- stage: ARM Template
+  dependsOn: []
+  jobs:
+    - job: Build
+      pool: 
+        vmImage: 'VS2017-Win2016'
+      steps:
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/ARM/'
+            ArtifactName: 'ARM'
