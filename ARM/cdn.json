@@ -127,7 +127,7 @@
                 "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), tolower(parameters('cdn_name')))]"
             ],
             "properties": {
-                "hostName": "[parameters('custom-domain')"
+                "hostName": "[parameters('custom-domain')]"
             }
         }
     ]
