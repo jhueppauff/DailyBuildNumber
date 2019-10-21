@@ -39,7 +39,7 @@
         {
             "type": "Microsoft.Cdn/profiles/endpoints",
             "apiVersion": "2016-04-02",
-            "name": "[concat(parameters('profiles_DailyBuild_cdn_name'), '/', parameters('cdn_name'))]",
+            "name": "[concat(parameters('cdn_name'), '/', parameters('cdn_name'))]",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles', parameters('cdn_name'))]"
