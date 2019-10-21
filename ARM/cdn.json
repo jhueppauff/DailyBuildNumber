@@ -124,7 +124,7 @@
             "apiVersion": "2016-04-02",
             "name": "[concat(parameters('cdn_name'), '/', parameters('cdn_name'), '/', parameters('custom-domain'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), '/', tolower(parameters('cdn_name'))]"
+                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), '/', tolower(parameters('cdn_name')))]"
             ],
             "properties": {
                 "hostName": "[parameters('custom-domain')]"
