@@ -129,6 +129,6 @@
             "properties": {
                 "hostName": "[parameters('custom-domain')"
             }
-        },
+        }
     ]
 }
