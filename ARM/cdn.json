@@ -108,7 +108,7 @@
         {
             "type": "Microsoft.Cdn/profiles/endpoints/origins",
             "apiVersion": "2016-04-02",
-            "name": "[concat(parameters('cdn_name'), '/', tolower(parameters('cdn_name')), '/dailybuildsa-z6-web-core-windows-net')]",
+            "name": "[concat(parameters('cdn_name'), '/', tolower(parameters('cdn_name')), '/', parameters('content_remote_hostname'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), tolower(parameters('cdn_name')))]",
                 "[resourceId('Microsoft.Cdn/profiles', parameters('cdn_name'))]"
@@ -122,9 +122,9 @@
         {
             "type": "Microsoft.Cdn/profiles/endpoints/customdomains",
             "apiVersion": "2016-04-02",
-            "name": "[concat(parameters('cdn_name'), '/', parameters('cdn_name'), '/buildnumber-apps-hueppauff-com')]",
+            "name": "[concat(parameters('cdn_name'), '/', parameters('cdn_name'), '/', parameters('custom-domain'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), tolower(parameters('cdn_name')))]"
+                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), '/', tolower(parameters('cdn_name'))]"
             ],
             "properties": {
                 "hostName": "[parameters('custom-domain')]"
