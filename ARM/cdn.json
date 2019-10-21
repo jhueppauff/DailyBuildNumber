@@ -2,18 +2,32 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "profiles_DailyBuild_cdn_name": {
+        "cdn_name": {
             "defaultValue": "DailyBuild-cdn",
             "type": "String"
+        },
+        "content_remote_hostname" : {
+            "defaultValue" : "dailybuildsa.z6.web.core.windows.net",
+            "type" : "String"
+        },
+        "location" : {
+            "type" : "String",
+            "defaultValue" : "West Europe"
+        },
+        "custom-domain" : {
+            "type" : "string",
+            "defaultValue" : "buildnumber.apps.hueppauff.com"
         }
     },
-    "variables": {},
+    "variables": {
+        
+    },
     "resources": [
         {
             "type": "Microsoft.Cdn/profiles",
             "apiVersion": "2016-04-02",
             "name": "[parameters('profiles_DailyBuild_cdn_name')]",
-            "location": "WestEurope",
+            "location": "[parameters('location')]",
             "sku": {
                 "name": "Standard_Microsoft"
             },
@@ -26,20 +40,20 @@
             "type": "Microsoft.Cdn/profiles/endpoints",
             "apiVersion": "2016-04-02",
             "name": "[concat(parameters('profiles_DailyBuild_cdn_name'), '/', parameters('profiles_DailyBuild_cdn_name'))]",
-            "location": "WestEurope",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_DailyBuild_cdn_name'))]"
             ],
             "properties": {
-                "originHostHeader": "dailybuildsa.z6.web.core.windows.net",
+                "originHostHeader": "[parameters('content_remote_hostname')]",
                 "isHttpAllowed": true,
                 "isHttpsAllowed": true,
                 "queryStringCachingBehavior": "IgnoreQueryString",
                 "origins": [
                     {
-                        "name": "dailybuildsa-z6-web-core-windows-net",
+                        "name": "[parameters('content_remote_hostname')]",
                         "properties": {
-                            "hostName": "dailybuildsa.z6.web.core.windows.net",
+                            "hostName": "[parameters('content_remote_hostname')]",
                             "httpPort": 80,
                             "httpsPort": 443
                         }
@@ -100,10 +114,21 @@
                 "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_DailyBuild_cdn_name'))]"
             ],
             "properties": {
-                "hostName": "dailybuildsa.z6.web.core.windows.net",
+                "hostName": "[parameters('content_remote_hostname')]",
                 "httpPort": 80,
                 "httpsPort": 443
             }
-        }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/endpoints/customdomains",
+            "apiVersion": "2016-04-02",
+            "name": "[concat(parameters('profiles_DailyBuild_cdn_name'), '/', parameters('profiles_DailyBuild_cdn_name'), '/buildnumber-apps-hueppauff-com')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('profiles_DailyBuild_cdn_name'), parameters('profiles_DailyBuild_cdn_name'))]"
+            ],
+            "properties": {
+                "hostName": "[parameters('custom-domain')"
+            }
+        },
     ]
 }
