@@ -51,7 +51,7 @@
                 "queryStringCachingBehavior": "IgnoreQueryString",
                 "origins": [
                     {
-                        "name": "[parameters('content_remote_hostname')]",
+                        "name": "storage",
                         "properties": {
                             "hostName": "[parameters('content_remote_hostname')]",
                             "httpPort": 80,
