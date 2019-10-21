@@ -41,8 +41,29 @@
             "location": "[parameters('location')]",
             "tags": {
             },
+            "kind": "StorageV2",
             "properties": {
-                "accountType": "Standard_LRS"
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "accountType": "Standard_LRS",
+                "tier": "Standard",
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
             }
         },
         {
