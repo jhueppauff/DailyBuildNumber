@@ -66,22 +66,15 @@ stages:
           displayName: 'Dotnet Publish'
           inputs:
             command: publish
-            arguments: '--configuration Release --output publish_output'
+            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
             projects: 'Function/*.csproj'
             publishWebProjects: false
             modifyOutputPath: true
-            zipAfterPublish: false
-
-        - task: ArchiveFiles@2
-          displayName: "Archive files"
-          inputs:
-            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/Function/publish_output/"
-            includeRootFolder: false
-            archiveFile: "$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip"
+            zipAfterPublish: true
 
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: '$(System.DefaultWorkingDirectory)/Function/build$(Build.BuildId).zip'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'Function'
 
 - stage: 'ARMTemplate'
