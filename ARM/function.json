@@ -20,13 +20,13 @@
     },
     "variables": {
     },
-    "resources": [      
+    "resources": [
         {
             "name": "[parameters('applicationInsightsName')]",
             "type": "Microsoft.Insights/components",
             "apiVersion": "2015-05-01",
             "location": "[parameters('location')]",
-            "kind" : "web",
+            "kind": "web",
             "dependsOn": [
             ],
             "properties": {
@@ -45,8 +45,10 @@
             "properties": {
                 "networkAcls": {
                     "bypass": "AzureServices",
-                    "virtualNetworkRules": [],
-                    "ipRules": [],
+                    "virtualNetworkRules": [
+                    ],
+                    "ipRules": [
+                    ],
                     "defaultAction": "Allow"
                 },
                 "supportsHttpsTrafficOnly": true,
@@ -64,6 +66,20 @@
                     "keySource": "Microsoft.Storage"
                 },
                 "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('serverFarmName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic"
+            },
+            "properties": {
+                "name": "[parameters('serverFarmName')]",
+                "computeMode": "Dynamic"
             }
         },
         {
