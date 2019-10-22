@@ -6,21 +6,21 @@
             "defaultValue": "DailyBuild-cdn",
             "type": "String"
         },
-        "content_remote_hostname" : {
-            "defaultValue" : "dailybuildsa.z6.web.core.windows.net",
-            "type" : "String"
+        "content_remote_hostname": {
+            "defaultValue": "dailybuildsa.z6.web.core.windows.net",
+            "type": "String"
         },
-        "location" : {
-            "type" : "String",
-            "defaultValue" : "West Europe"
+        "location": {
+            "type": "String",
+            "defaultValue": "West Europe"
         },
-        "custom-domain" : {
-            "type" : "string",
-            "defaultValue" : "buildnumber.apps.hueppauff.com"
+        "custom-domain": {
+            "type": "string",
+            "defaultValue": "buildnumber.apps.hueppauff.com"
         }
     },
     "variables": {
-        
+
     },
     "resources": [
         {
@@ -106,29 +106,15 @@
             }
         },
         {
-            "type": "Microsoft.Cdn/profiles/endpoints/origins",
-            "apiVersion": "2016-04-02",
-            "name": "[concat(parameters('cdn_name'), '/', tolower(parameters('cdn_name')), '/origin1')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), tolower(parameters('cdn_name')))]",
-                "[resourceId('Microsoft.Cdn/profiles', parameters('cdn_name'))]"
-            ],
-            "properties": {
-                "hostName": "[parameters('content_remote_hostname')]",
-                "httpPort": 80,
-                "httpsPort": 443
-            }
-        },
-        {
-            "type": "Microsoft.Cdn/profiles/endpoints/customdomains",
-            "apiVersion": "2016-04-02",
-            "name": "[concat(parameters('cdn_name'), '/', parameters('cdn_name'), '/customdomain')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), tolower(parameters('cdn_name')))]"
-            ],
+            "name": "[concat(parameters('cdn_name'), '/', tolower(parameters('cdn_name')), '/', replace(parameters('custom-domain'),'.', '-'))]",
+            "type": "Microsoft.Cdn/profiles/endpoints/customDomains",
+            "apiVersion": "2017-10-12",
             "properties": {
                 "hostName": "[parameters('custom-domain')]"
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdn_name'), parameters('cdn_name'))]"
+            ]
         }
     ]
 }
