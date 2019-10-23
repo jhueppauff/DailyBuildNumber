@@ -13,6 +13,12 @@ namespace DailyBuildNumber.Function
 {
     public static class GetDailyBuildNumber
     {
+        /// <summary>
+        /// Returns a Buildnumber. If no <see cref="Model.Request"/> Body was specified it will return the Version for the current Day. 
+        /// Otherwise it will return the Build Version for the Date specified in the Request Body.
+        /// </summary>
+        /// <param name="Request">The <see cref="Model.Request"/> Body</param>
+        /// <returns>Returns <see cref="Model.Request"/></returns>
         [FunctionName("GetDailyBuildNumber")]
         public static HttpResponseMessage Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] Request req,
@@ -20,24 +26,16 @@ namespace DailyBuildNumber.Function
         {
             BuildNumber buildNumber;
 
-            if (req != null)
+            if (req.Date != null)
             {
-                if (req.Date != null)
-                {
-                    DateTime date = DateTime.Parse(req.Date);
+                DateTime date = DateTime.Parse(req.Date);
+                int year = date.Year % 100;
 
-                    int year = date.Year % 100;
-
-                    buildNumber = new BuildNumber(year, date.DayOfYear); 
-                }
-                else
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
+                buildNumber = new BuildNumber(year, date.DayOfYear);
             }
-            else 
+            else
             {
-                 buildNumber = new BuildNumber();
+                buildNumber = new BuildNumber();
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK)
